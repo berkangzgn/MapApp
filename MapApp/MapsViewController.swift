@@ -22,6 +22,9 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     var selectedLatitude = Double()
     var selectedLongitude = Double()
     
+    var selectedName = ""
+    var selectedId : UUID?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +47,14 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         gestureRecognizer.minimumPressDuration = 2
             // Noktayı haritaya ekledik.
         mapView.addGestureRecognizer(gestureRecognizer)
+        
+        if selectedName != "" {
+            if let uuidString = selectedId?.uuidString {
+                print(uuidString)
+            }
+        } else {
+            
+        }
     }
     
     
@@ -82,7 +93,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         
         // Konumu değiştirmek için
             // Belirtilen bölgenin yükseklik ve genişliği. Zoom durumunda seçtiğimiz yerin büyüklüğünün değişmesi durumu. Eğer çok fazla zoom göstermesin istiyorsak 0.9, 0.9a çekebiliriz.
-        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             // Haritadaki bölge
         let region = MKCoordinateRegion(center: locaiton, span: span)
         mapView.setRegion(region, animated: true)

@@ -15,6 +15,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dizi tanımları
     var nameArray = [String]()
     var idArray = [UUID]()
+    var selectedPlaceName = ""
+    var selectedPlaceId : UUID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +64,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
  
     @objc func addButtonClicked() {
+        selectedPlaceName = ""
         performSegue(withIdentifier: "toMapsVC", sender: nil)
     }
     
@@ -75,5 +78,23 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = UITableViewCell()
         cell.textLabel?.text = nameArray[indexPath.row]
         return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedPlaceName = nameArray[indexPath.row]
+        selectedPlaceId = idArray[indexPath.row]
+        performSegue(withIdentifier: "toMapsVC", sender: nil)
+    }
+    
+    
+    // MAPSVC ERİŞİM
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            // Hazırda konuştuğumuz VC ise
+        if segue.identifier == "toMapsVC" {
+            let destinationVC = segue.destination as! MapsViewController
+            destinationVC.selectedName = selectedPlaceName
+            destinationVC.selectedId = selectedPlaceId
+        }
     }
 }
