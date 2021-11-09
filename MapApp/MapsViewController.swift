@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 import CoreData
 
-class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
         // Bir ekleme yapmadan önce "Cann't MKMapView in scope" diye hata veriyor. Onu   düzeltmek için "import MapKit" ekledik.
     @IBOutlet weak var mapView: MKMapView!
