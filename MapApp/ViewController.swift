@@ -14,6 +14,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
         // Bir ekleme yapmadan önce "Cann't MKMapView in scope" diye hata veriyor. Onu   düzeltmek için "import MapKit" ekledik.
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var placeText: UITextField!
+    @IBOutlet weak var noteText: UITextField!
     var locationManager = CLLocationManager()
     
     override func viewDidLoad() {
@@ -53,8 +55,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 // İşaretleme
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
-            annotation.title = "Kullanıcı Seçimi"
-            annotation.subtitle = "Örnek altyazı"
+            annotation.title = placeText.text
+            annotation.subtitle = noteText.text
             mapView.addAnnotation(annotation)
         }
     }
