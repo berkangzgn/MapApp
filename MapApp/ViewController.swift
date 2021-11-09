@@ -31,16 +31,43 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         locationManager.requestWhenInUseAuthorization()
             // Location güncellemeye başladık.
         locationManager.startUpdatingLocation()
+        
+            // Kullanıcının işaretleme yapabilmesi için
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(selectLocation(gestureRecognizer:)))
+            // Minimum basma süresini ayarladık.
+        gestureRecognizer.minimumPressDuration = 2
+            // Noktayı haritaya ekledik.
+        mapView.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    
+        //  Yukarıdaki gestureRecognizer içerisine ulaşmak için alttaki fonk.a parametreler verdik.
+    @objc func selectLocation (gestureRecognizer : UILongPressGestureRecognizer) {
+            // State : Durum, Began : başlamak (begin)
+        if gestureRecognizer.state == .began {
+            let touchPoint = gestureRecognizer.location(in: mapView)
+            
+            // NOKTAYI KOORDİNATA ÇEVİRME
+            let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom : mapView)
+            
+                // İşaretleme
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = touchCoordinate
+            annotation.title = "Kullanıcı Seçimi"
+            annotation.subtitle = "Örnek altyazı"
+            mapView.addAnnotation(annotation)
+        }
     }
 
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         // altitude - yükseklik
         // coordinate.latitude - enlem
         // coordinate.longitude - boylam
         
-        //print(locations[0].coordinate.latitude)
-        //print(locations[0].coordinate.longitude)
+        //print(locations[0].coordinate.latitude) : x noktasını yazdırma
+        //print(locations[0].coordinate.longitude) : y noktasını yazdırma
         
         let locaiton = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
         
@@ -51,6 +78,4 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         let region = MKCoordinateRegion(center: locaiton, span: span)
         mapView.setRegion(region, animated: true)
     }
-
 }
-
