@@ -9,6 +9,7 @@ import UIKit
 import MapKit
     // Konum bilgilerimizi alması için
 import CoreLocation
+import CoreData
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
@@ -16,7 +17,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var placeText: UITextField!
     @IBOutlet weak var noteText: UITextField!
+    
     var locationManager = CLLocationManager()
+    var selectedLatitude = Double()
+    var selectedLongitude = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +56,9 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             // NOKTAYI KOORDİNATA ÇEVİRME
             let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom : mapView)
             
+            selectedLatitude = touchCoordinate.latitude
+            selectedLongitude = touchCoordinate.longitude
+            
                 // İşaretleme
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
@@ -79,5 +86,27 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             // Haritadaki bölge
         let region = MKCoordinateRegion(center: locaiton, span: span)
         mapView.setRegion(region, animated: true)
+    }
+    
+    
+    @IBAction func saveClicked(_ sender: Any) {
+        // CONTEXT'E ULAŞIYORUZ
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        // VERİ SET'LİYORUZ
+        let newPlace = NSEntityDescription.insertNewObject(forEntityName: "Place", into: context)
+        newPlace.setValue(placeText.text, forKey: "placeName")
+        newPlace.setValue(noteText.text, forKey: "note")
+        newPlace.setValue(selectedLatitude, forKey: "latitude")
+        newPlace.setValue(selectedLongitude, forKey: "longitude")
+        newPlace.setValue(UUID(), forKey: "id")
+        
+        do{
+            try context.save()
+            print("kayıt edildi")
+        } catch {
+            print("devam yeğenim")
+        }
     }
 }

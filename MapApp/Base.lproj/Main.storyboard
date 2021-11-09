@@ -16,9 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4YI-3h-1sw">
-                                <rect key="frame" x="0.0" y="128" width="414" height="734"/>
-                            </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter place name.." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Br-gC-CKq">
                                 <rect key="frame" x="43" y="44" width="329" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -29,20 +26,33 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fP-hi-Bc9">
+                                <rect key="frame" x="180" y="831" width="56" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Save"/>
+                                <connections>
+                                    <action selector="saveClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ezo-0v-dpo"/>
+                                </connections>
+                            </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4YI-3h-1sw">
+                                <rect key="frame" x="1" y="138" width="414" height="685"/>
+                            </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Br-gC-CKq" firstAttribute="trailing" secondItem="sec-0b-2iq" secondAttribute="trailing" id="11v-UF-C2X"/>
-                            <constraint firstItem="6Br-gC-CKq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6KC-qH-oR4"/>
-                            <constraint firstItem="6Br-gC-CKq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Iyp-Fr-XKf"/>
-                            <constraint firstItem="4YI-3h-1sw" firstAttribute="top" secondItem="sec-0b-2iq" secondAttribute="bottom" constant="8" id="OeY-cN-GXp"/>
-                            <constraint firstItem="6Br-gC-CKq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="43" id="SYi-sM-Nfb"/>
-                            <constraint firstItem="4YI-3h-1sw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="T3n-ji-dm6"/>
-                            <constraint firstItem="sec-0b-2iq" firstAttribute="centerX" secondItem="4YI-3h-1sw" secondAttribute="centerX" id="TY2-rF-28x"/>
-                            <constraint firstItem="4YI-3h-1sw" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="UCT-CJ-1Qm"/>
-                            <constraint firstItem="6Br-gC-CKq" firstAttribute="leading" secondItem="sec-0b-2iq" secondAttribute="leading" id="WO7-1e-9UX"/>
-                            <constraint firstItem="sec-0b-2iq" firstAttribute="top" secondItem="6Br-gC-CKq" secondAttribute="bottom" constant="8" id="k4T-nP-mms"/>
+                            <constraint firstItem="4YI-3h-1sw" firstAttribute="centerX" secondItem="4fP-hi-Bc9" secondAttribute="centerX" id="CSy-Nf-3gg"/>
+                            <constraint firstItem="6Br-gC-CKq" firstAttribute="leading" secondItem="sec-0b-2iq" secondAttribute="leading" id="DG8-8W-dI5"/>
+                            <constraint firstItem="4fP-hi-Bc9" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="HdN-6a-Z61"/>
+                            <constraint firstItem="sec-0b-2iq" firstAttribute="centerX" secondItem="4YI-3h-1sw" secondAttribute="centerX" id="MUN-P8-kfc"/>
+                            <constraint firstItem="6Br-gC-CKq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QlB-b0-DKY"/>
+                            <constraint firstItem="4fP-hi-Bc9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="180" id="RzX-62-jvD"/>
+                            <constraint firstItem="sec-0b-2iq" firstAttribute="top" secondItem="6Br-gC-CKq" secondAttribute="bottom" constant="8" id="XCB-m4-ncD"/>
+                            <constraint firstItem="4fP-hi-Bc9" firstAttribute="top" secondItem="4YI-3h-1sw" secondAttribute="bottom" constant="8" id="fH3-2t-gMn"/>
+                            <constraint firstItem="6Br-gC-CKq" firstAttribute="trailing" secondItem="sec-0b-2iq" secondAttribute="trailing" id="lQM-hm-6gJ"/>
+                            <constraint firstItem="6Br-gC-CKq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="43" id="n1S-DK-h39"/>
+                            <constraint firstItem="4YI-3h-1sw" firstAttribute="top" secondItem="sec-0b-2iq" secondAttribute="bottom" constant="18" id="oKX-pt-YbE"/>
+                            <constraint firstItem="4YI-3h-1sw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="1" id="oWm-6h-Ndv"/>
                         </constraints>
                     </view>
                     <connections>
