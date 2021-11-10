@@ -25,6 +25,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     var selectedName = ""
     var selectedId : UUID?
     
+        // ListVC'den gelen verileri bu sayfada kullanabilmek için bu değişkenleri tanımlayıp buna atıyoruz
+    var annotationTitle = ""
+    var annotationSubtitle = ""
+    var annotationLatitude = Double()
+    var annotationLongitude = Double()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,10 +56,52 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         
         if selectedName != "" {
             if let uuidString = selectedId?.uuidString {
-                print(uuidString)
+                    // Verileri filtreleme için DB erişim
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let context = appDelegate.persistentContainer.viewContext
+                
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult> (entityName: "Place")
+                    // ***** Anasayfada birden fazla nesneyi filtreleme satırı *****
+                fetchRequest.predicate = NSPredicate(format: "id = %@", uuidString)
+                fetchRequest.returnsObjectsAsFaults = false
+                
+                
+                // ANNOTATION ATAMA
+                do {
+                    let conclusions = try context.fetch(fetchRequest)
+                    if conclusions.count > 0 {
+                        for conclusion in conclusions as! [NSManagedObject] {
+                                // ID zaten bize attribute olarak geldiği için tekrardan çekmiyoruz
+                            if let placeName = conclusion.value(forKey: "placeName") as? String {
+                                annotationTitle = placeName
+                                if let note = conclusion.value(forKey: "note") as? String {
+                                    annotationSubtitle = note
+                                    if let longitude = conclusion.value(forKey: "longitude") as? Double {
+                                        annotationLongitude = longitude
+                                        if let latitude = conclusion.value(forKey: "latitude") as? Double {
+                                            annotationLatitude = latitude
+                                            let annotation = MKPointAnnotation()
+                                            annotation.title = annotationTitle
+                                            annotation.subtitle = annotationSubtitle
+                                            
+                                            let annotationCoordinate = CLLocationCoordinate2D(latitude: annotationLatitude, longitude: annotationLongitude)
+                                            annotation.coordinate = annotationCoordinate
+                                            
+                                            mapView.addAnnotation(annotation)
+                                            placeText.text = annotationTitle
+                                            noteText.text = annotationSubtitle
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch {
+                    print("You've an error in mapsVC annotations!")
+                }
             }
         } else {
-            
+            print("You've an error in mapsVC annotations else!")
         }
     }
     
