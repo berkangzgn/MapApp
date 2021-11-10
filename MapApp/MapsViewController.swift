@@ -21,7 +21,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     var locationManager = CLLocationManager()
     var selectedLatitude = Double()
     var selectedLongitude = Double()
-    
     var selectedName = ""
     var selectedId : UUID?
     
@@ -33,7 +32,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
             // Delegate : Herhangi bir olay olduğunda bir nesnenin başka bir nesneye haber göndermesini sağlayan Design Pattern'dir.
             // Bu satırda da mapView Delegate tanımı yaptık.
         mapView.delegate = self
@@ -90,6 +88,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                                             mapView.addAnnotation(annotation)
                                             placeText.text = annotationTitle
                                             noteText.text = annotationSubtitle
+                                            
+                                                // Konum güncellemeyi durdurduk.
+                                            locationManager.stopUpdatingLocation()
+                                            let annotationSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                                            let region = MKCoordinateRegion(center: annotationCoordinate, span: annotationSpan)
+                                            mapView.setRegion(region, animated: true)
                                         }
                                     }
                                 }
