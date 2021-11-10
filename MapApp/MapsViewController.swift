@@ -137,6 +137,36 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     }
     
     
+        // Gösterdiğimiz butonun üstüne tıklanınca ne olacak
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+            // Daha önce kayıt ettiğimiz yere baktığmızdan emin olduk
+        if selectedName != "" {
+            // CLGecoder : Koordinatlar ile yerler arasında bağlantılar yapmaya çalışır
+            
+            let requestLocation = CLLocation(latitude: annotationLatitude, longitude: annotationLongitude)
+            
+                // Geocoder işlemini tersten yapar
+            CLGeocoder().reverseGeocodeLocation(requestLocation) { (placemarkArray, error) in
+                    // Placemarks optional olmaması için if let bloğuna soktuk
+                if let placemarks = placemarkArray {
+                    if placemarks.count > 0 {
+                            // Oluşturacağımız harita öğresinin nereden olacağını tanımladık
+                        let newPlacemark = MKPlacemark(placemark: placemarks[0])
+                            // Harita üzerinde kullanacağımız bir öğe tanımı
+                        let item = MKMapItem(placemark: newPlacemark)
+                            // Closure'ler içerisinde yeni bir kod bloğu oluştuğu için kafa karşıklığı olmasın diye sayfanın üstünde tanımladığımız aanotationTitle olduğunu belirtmek için self anahtar kelimesini kullandık.
+                        item.name = self.annotationTitle
+                        
+                            // Navigasyonu açıyoruz.
+                        let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking]
+                        item.openInMaps(launchOptions: launchOptions)
+                    }
+                }
+            }
+        }
+    }
+    
+    
         //  Yukarıdaki gestureRecognizer içerisine ulaşmak için alttaki fonk.a parametreler verdik.
     @objc func selectLocation (gestureRecognizer : UILongPressGestureRecognizer) {
             // State : Durum, Began : başlamak (begin)
