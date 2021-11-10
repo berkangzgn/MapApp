@@ -91,9 +91,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                                             
                                                 // Konum güncellemeyi durdurduk.
                                             locationManager.stopUpdatingLocation()
+                                            
+                                                // Seçilen noktayı haritada annotations'a eşliyoruz
                                             let annotationSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                                            let region = MKCoordinateRegion(center: annotationCoordinate, span: annotationSpan)
-                                            mapView.setRegion(region, animated: true)
+                                            let annotationRegion = MKCoordinateRegion(center: annotationCoordinate, span: annotationSpan)
+                                            mapView.setRegion(annotationRegion, animated: true)
                                         }
                                     }
                                 }
@@ -197,15 +199,16 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         
         //print(locations[0].coordinate.latitude) : x noktasını yazdırma
         //print(locations[0].coordinate.longitude) : y noktasını yazdırma
-        
-        let locaiton = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
-        
-        // Konumu değiştirmek için
-            // Belirtilen bölgenin yükseklik ve genişliği. Zoom durumunda seçtiğimiz yerin büyüklüğünün değişmesi durumu. Eğer çok fazla zoom göstermesin istiyorsak 0.9, 0.9a çekebiliriz.
-        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-            // Haritadaki bölge
-        let region = MKCoordinateRegion(center: locaiton, span: span)
-        mapView.setRegion(region, animated: true)
+        if selectedName != "" {
+            let locaiton = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
+            
+            // Konumu değiştirmek için
+                // Belirtilen bölgenin yükseklik ve genişliği. Zoom durumunda seçtiğimiz yerin büyüklüğünün değişmesi durumu. Eğer çok fazla zoom göstermesin istiyorsak 0.9, 0.9a çekebiliriz.
+            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                // Haritadaki bölge
+            let region = MKCoordinateRegion(center: locaiton, span: span)
+            mapView.setRegion(region, animated: true)
+        }
     }
     
     
