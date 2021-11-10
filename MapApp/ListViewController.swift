@@ -29,7 +29,25 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         giveData()
     }
     
-    func giveData() {
+    
+    // ListVC her gözüktüğünde bu fonk çalışıtırlıyor. Buraya bşr gözlemci yerleştiriyoruz ve gözlemci dönüt alırsa ne yapacağını tanımlıyoruz.
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(giveData), name: NSNotification.Name("newPlaceCreated"), object: nil)
+    }
+    
+    
+    // MAPSVC ERİŞİM
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            // Hazırda konuştuğumuz VC ise
+        if segue.identifier == "toMapsVC" {
+            let destinationVC = segue.destination as! MapsViewController
+            destinationVC.selectedName = selectedPlaceName
+            destinationVC.selectedId = selectedPlaceId
+        }
+    }
+    
+        // Veri alma fonks
+    @objc func giveData() {
             // DB bağlantısı
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
@@ -62,12 +80,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
- 
-    @objc func addButtonClicked() {
-        selectedPlaceName = ""
-        performSegue(withIdentifier: "toMapsVC", sender: nil)
-    }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return idArray.count
@@ -88,13 +100,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    // MAPSVC ERİŞİM
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            // Hazırda konuştuğumuz VC ise
-        if segue.identifier == "toMapsVC" {
-            let destinationVC = segue.destination as! MapsViewController
-            destinationVC.selectedName = selectedPlaceName
-            destinationVC.selectedId = selectedPlaceId
-        }
+    @objc func addButtonClicked() {
+        selectedPlaceName = ""
+        performSegue(withIdentifier: "toMapsVC", sender: nil)
     }
 }

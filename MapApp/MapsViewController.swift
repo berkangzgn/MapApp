@@ -110,6 +110,33 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     }
     
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        let reuseId = "xx"
+            // Tekrar tekrar kullanlabilen bir anatasyon
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                // Annotation'umuz başka bir şey gösterebilir mi?
+            pinView?.canShowCallout = true
+            pinView?.tintColor = .blue
+            
+                // detailDisclosure : Detay gösterme ikonu
+            let button = UIButton(type: .detailDisclosure)
+                // butonu sağda gösterebildiğimiz gibi solda da gösterebiliriz. Bunu için callout değiştirmemiz gerekli
+            pinView?.rightCalloutAccessoryView = button
+        } else {
+            pinView?.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
+    
         //  Yukarıdaki gestureRecognizer içerisine ulaşmak için alttaki fonk.a parametreler verdik.
     @objc func selectLocation (gestureRecognizer : UILongPressGestureRecognizer) {
             // State : Durum, Began : başlamak (begin)
@@ -171,5 +198,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         } catch {
             print("devam yeğenim")
         }
+        
+        
+            // Konum ekledikten sonra ana sayfaya dönme
+        NotificationCenter.default.post(name: NSNotification.Name("newPlaceCreated"), object: nil)
+            // ListVC geri döndürme
+        navigationController?.popViewController(animated: true)
+        
     }
 }
