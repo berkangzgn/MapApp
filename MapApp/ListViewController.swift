@@ -30,13 +30,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    // ListVC her gözüktüğünde bu fonk çalışıtırlıyor. Buraya bşr gözlemci yerleştiriyoruz ve gözlemci dönüt alırsa ne yapacağını tanımlıyoruz.
+        // ListVC her gözüktüğünde bu fonk çalışıtırlıyor. Buraya bir gözlemci yerleştiriyoruz ve gözlemci dönüt alırsa ne yapacağını tanımlıyoruz.
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(giveData), name: NSNotification.Name("newPlaceCreated"), object: nil)
     }
     
     
-    // MAPSVC ERİŞİM
+        // MAPSVC ERİŞİM
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             // Hazırda konuştuğumuz VC ise
         if segue.identifier == "toMapsVC" {
@@ -45,6 +45,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             destinationVC.selectedId = selectedPlaceId
         }
     }
+    
     
         // Veri alma fonks
     @objc func giveData() {
@@ -64,7 +65,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 nameArray.removeAll(keepingCapacity: false)
                 idArray.removeAll(keepingCapacity: false)
                 
-                    // Dizilerde dönerek bilgileri çekme ve tnaımlı dizileri doldurma
+                    // Dizilerde dönerek bilgileri çekme ve tanımlı dizileri doldurma
                 for result in results as! [NSManagedObject] {
                     if let name = result.value(forKey: "placeName") as? String {
                         nameArray.append(name)

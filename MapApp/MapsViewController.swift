@@ -58,7 +58,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let context = appDelegate.persistentContainer.viewContext
                 
-                let fetchRequest = NSFetchRequest<NSFetchRequestResult> (entityName: "Place")
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
                     // ***** Anasayfada birden fazla nesneyi filtreleme satırı *****
                 fetchRequest.predicate = NSPredicate(format: "id = %@", uuidString)
                 fetchRequest.returnsObjectsAsFaults = false
@@ -78,6 +78,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                                         annotationLongitude = longitude
                                         if let latitude = conclusion.value(forKey: "latitude") as? Double {
                                             annotationLatitude = latitude
+                                            
                                             let annotation = MKPointAnnotation()
                                             annotation.title = annotationTitle
                                             annotation.subtitle = annotationSubtitle
@@ -92,10 +93,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                                                 // Konum güncellemeyi durdurduk.
                                             locationManager.stopUpdatingLocation()
                                             
+                                            
                                                 // Seçilen noktayı haritada annotations'a eşliyoruz
-                                            let annotationSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                                            let annotationRegion = MKCoordinateRegion(center: annotationCoordinate, span: annotationSpan)
-                                            mapView.setRegion(annotationRegion, animated: true)
+                                            let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                                            let region = MKCoordinateRegion(center: annotationCoordinate, span: span)
+                                            mapView.setRegion(region, animated: true)
+                                            
                                         }
                                     }
                                 }
@@ -107,7 +110,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                 }
             }
         } else {
-            print("You've an error in mapsVC annotations else!")
+            print("Seçilen id boş")
         }
     }
     
@@ -129,7 +132,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
             
                 // detailDisclosure : Detay gösterme ikonu
             let button = UIButton(type: .detailDisclosure)
-                // butonu sağda gösterebildiğimiz gibi solda da gösterebiliriz. Bunu için callout değiştirmemiz gerekli
+                // Butonu sağda gösterebildiğimiz gibi solda da gösterebiliriz. Bunu için callout değiştirmemiz gerekli
             pinView?.rightCalloutAccessoryView = button
         } else {
             pinView?.annotation = annotation
@@ -139,7 +142,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     }
     
     
-        // Gösterdiğimiz butonun üstüne tıklanınca ne olacak
+        // Gösterdiğimiz butonun üstüne tıklanınca ne olacak?
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             // Daha önce kayıt ettiğimiz yere baktığmızdan emin olduk
         if selectedName != "" {
@@ -159,7 +162,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
                             // Closure'ler içerisinde yeni bir kod bloğu oluştuğu için kafa karşıklığı olmasın diye sayfanın üstünde tanımladığımız aanotationTitle olduğunu belirtmek için self anahtar kelimesini kullandık.
                         item.name = self.annotationTitle
                         
-                            // Navigasyonu açıyoruz.
+                            // Navigasyonu açma
                         let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking]
                         item.openInMaps(launchOptions: launchOptions)
                     }
@@ -169,7 +172,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     }
     
     
-        //  Yukarıdaki gestureRecognizer içerisine ulaşmak için alttaki fonk.a parametreler verdik.
+        //  Yukarıdaki gestureRecognizer içerisine ulaşmak için alttaki fonk.a parametreler verdik. Haritada nokta seçerken alttaki fonk kullandık.
     @objc func selectLocation (gestureRecognizer : UILongPressGestureRecognizer) {
             // State : Durum, Began : başlamak (begin)
         if gestureRecognizer.state == .began {
@@ -199,14 +202,15 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         
         //print(locations[0].coordinate.latitude) : x noktasını yazdırma
         //print(locations[0].coordinate.longitude) : y noktasını yazdırma
+        
         if selectedName != "" {
-            let locaiton = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
+            let location = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
             
-            // Konumu değiştirmek için
-                // Belirtilen bölgenin yükseklik ve genişliği. Zoom durumunda seçtiğimiz yerin büyüklüğünün değişmesi durumu. Eğer çok fazla zoom göstermesin istiyorsak 0.9, 0.9a çekebiliriz.
-            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            // KONUM DEĞİŞTİRME
+                // Belirtilen bölgenin yükseklik ve genişliği. Zoom durumunda seçtiğimiz yerin büyüklüğünün değişmesi durumu. Eğer çok fazla yakınlaştırmasını istemiyorsak 0.9, 0.9a çekebiliriz.
+            let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
                 // Haritadaki bölge
-            let region = MKCoordinateRegion(center: locaiton, span: span)
+            let region = MKCoordinateRegion(center: location, span: span)
             mapView.setRegion(region, animated: true)
         }
     }
@@ -237,6 +241,5 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
         NotificationCenter.default.post(name: NSNotification.Name("newPlaceCreated"), object: nil)
             // ListVC geri döndürme
         navigationController?.popViewController(animated: true)
-        
     }
 }
